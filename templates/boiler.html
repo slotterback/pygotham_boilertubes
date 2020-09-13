@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block style %}
+{{super()}}
+<style>
+  #container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  #container canvas, #overlay {
+    position: absolute;
+  }
+
+  input[type=checkbox] + label {
+    margin: 0;
+    cursor: pointer;
+    padding: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  /*Render the actual checkboxes invisible*/
+  input[type=checkbox] {
+    display: none;
+  }
+
+  input[type=checkbox] + label::before {
+    content: "";
+    display: flex;
+    border: 1px solid #000;
+    border-radius: 50px; /*equal to circle radius*/
+    width: 100px;
+    height: 100px;
+    color: transparent;
+    transition: .2s;
+  }
+
+  /*shrink checkbox element to zero when clicked*/
+  input[type=checkbox] + label:active::before {
+    transform: scale(0);
+  }
+
+  /*color checked checkbox MediumSeaGreen*/
+  input[type=checkbox]:checked + label::before {
+    background-color: MediumSeaGreen;
+    border-color: MediumSeaGreen;
+    color: #fff;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+  <div id="container">
+    <canvas id="canvas" width="350" height="187"></canvas>
+    <form class="checkbox-wrapper" id="overlay">
+      <input type="checkbox" id="tube1">
+      <label for="tube1" style="position:absolute;left:-125px;top:50px"></label>
+      <input type="checkbox" id="tube2">
+      <label for="tube2" style="position:absolute;left:-25px;top:50px"></label>
+      <input type="checkbox" id="tube3">
+      <label for="tube3" style="position:absolute;left:75px;top:50px"></label>
+      <input type="checkbox" id="tube4">
+      <label for="tube4" style="position:absolute;left:-75px;top:136.6px"></label>
+      <input type="checkbox" id="tube5">
+      <label for="tube5" style="position:absolute;left:25px;top:136.6px"></label>
+      <input type="checkbox" id="tube6">
+      <label for="tube6" style="position:absolute;left:125px;top:136.6px"></label>
+    </form>
+  </div>
+
+
+    <script src="{{url_for('static',filename='js/drawBoiler.js')}}"></script>
+
+{% endblock %}
