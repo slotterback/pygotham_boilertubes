@@ -6,17 +6,10 @@ from models import Boiler, BoilerTube, TubePlugEvent
 def index():
     return "Hello, User!"
 
-@app.route('/site1')
-def site1():
-    return "Site 1"
-
-@app.route('/site2')
-def site2():
-    return "Site 2"
-
-@app.route('/boiler')
-def boiler():
-    return render_template('boiler.html')
+@app.route('/boiler/<int:id>')
+def boiler(id):
+    boiler = Boiler.query.filter_by(id=id).first_or_404()
+    return render_template('boiler_view.html', boiler=boiler)
 
 @app.route('/boiler_plug/<int:id>', methods=['GET', 'POST'])
 def boiler_plug(id):
@@ -28,7 +21,7 @@ def boiler_plug(id):
                 e = TubePlugEvent(is_plug_event = True)
                 tube.events.append(e)
         db.session.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('boiler',id=id))
     return render_template('boiler.html',boiler=boiler)
 
 @app.route('/boiler_repair/<int:id>', methods=['GET', 'POST'])
@@ -41,8 +34,7 @@ def boiler_repair(id):
                 e = TubePlugEvent(is_plug_event = False)
                 tube.events.append(e)
         db.session.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('boiler',id))
     return render_template('boiler.html',boiler=boiler)
-
 
 

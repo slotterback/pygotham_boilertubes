@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block style %}
+{{super()}}
+<style>
+  #container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: {{2*boiler.shell_radius +10}}px;
+    width: {{2*boiler.shell_radius+10}}px;
+  }
+
+  #container canvas {
+    position: absolute;
+  }
+
+  #button-row {
+    display: flex;
+    flex-direction: row;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div id="container">
+    <canvas id="canvas" width="{{2*boiler.shell_radius+10}}px" 
+	    height="{{2*boiler.shell_radius+10}}px"></canvas>
+  </div>
+  <div id="button-row">
+    <form action="{{url_for('boiler_plug',id=boiler.id)}}">
+      <input type="submit" value="Plug Tubes">
+    </form>
+    <form action="{{url_for('boiler_repair',id=boiler.id)}}">
+      <input type="submit" value="Replace Tubes">
+    </form>
+  </div>
+{% include 'draw_boiler.html' %}
+
+{% endblock %}
