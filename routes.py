@@ -31,4 +31,18 @@ def boiler_plug(id):
         return redirect(url_for('index'))
     return render_template('boiler.html',boiler=boiler)
 
+@app.route('/boiler_repair/<int:id>', methods=['GET', 'POST'])
+def boiler_repair(id):
+    boiler = Boiler.query.filter_by(id=id).first_or_404()
+    if request.method == 'POST':
+        for tube in boiler.tubes:
+            if (request.form.get(f'tube{tube.id}')):
+                tube.is_plugged = False
+                e = TubePlugEvent(is_plug_event = False)
+                tube.events.append(e)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('boiler.html',boiler=boiler)
+
+
 
