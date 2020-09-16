@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block style %}{{super()}}{% endblock %}
+
+{% block content %}
+{% for id in boiler_ids %}
+<form action = {{url_for('boiler',id=id[0])}}>
+  <input type="submit" value="Boiler_{{id[0]}}">
+</form>
+{% endfor %}
+{% endblock %}

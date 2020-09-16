@@ -9,7 +9,7 @@
     justify-content: center;
 }
 
-  #container canvas, #overlay {
+  #container canvas, #overlay, form {
     position: absolute;
   }
 
@@ -53,7 +53,8 @@
 {% endblock %}
 
 {% block content %}
-  <div id="container">
+<div id="container" width="{{2*boiler.shell_radius+10}}px" 
+     height="{{2*boiler.shell_radius+25}}px">
     <canvas id="canvas" width="{{2*boiler.shell_radius+10}}px" 
 	    height="{{2*boiler.shell_radius+10}}px"></canvas>
     <form class="checkbox-wrapper" id="overlay" action="" method="post">
@@ -63,11 +64,18 @@
              style="left:{{tube.x_coord-boiler.shell_radius-5}}px;top:{{tube.y_coord+5}}px"></label>
       {% endfor %}
       <input type="submit" 
-             style="position:absolute;left:0px;top:{{2*boiler.shell_radius+20}}px"
-             value = "Confirm">
+             style="position:absolute;left:0px;top:{{2*boiler.shell_radius+20}}px;transform:translate(-50%,0);"
+             value = "Confirm Changes">
+    </form>
+    <form action="{{url_for('boiler',id=boiler.id)}}"
+	  style="top:{{2*boiler.shell_radius+45}}px;">
+	    <input type="submit" value="Cancel Changes">
+    </form>
+    <form action="{{url_for('index')}}"
+	  style="top:{{2*boiler.shell_radius+70}}px;">
+      <input type="submit" value="Return to Home">
     </form>
   </div>
-
 {% include 'draw_boiler.html' %}
 
 {% endblock %}
