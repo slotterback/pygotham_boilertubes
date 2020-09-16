@@ -7,7 +7,7 @@
     position: relative;
     display: flex;
     justify-content: center;
-  }
+}
 
   #container canvas, #overlay {
     position: absolute;
@@ -68,31 +68,6 @@
     </form>
   </div>
 
-
-<script> 
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const tau = Math.PI * 2;
-
-ctx.beginPath();
-
-//Draw the outer boiler shell
-ctx.arc({{boiler.shell_radius+5}}, {{boiler.shell_radius + 5}},
-	        {{boiler.shell_radius}},0,tau);
-ctx.closePath();
-ctx.stroke();
-
-{% for tube in boiler.tubes %}
-ctx.beginPath();
-ctx.moveTo({{tube.x_coord+tube.radius}},{{tube.y_coord+5}});
-ctx.arc({{tube.x_coord}},{{tube.y_coord+5}},{{tube.radius}},0,tau);
-ctx.closePath();
-{% if tube.is_plugged %}
-ctx.fill();
-{% else %}
-ctx.stroke();
-{% endif %}
-{% endfor %}
-</script>
+{% include 'draw_boiler.html' %}
 
 {% endblock %}
