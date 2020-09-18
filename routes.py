@@ -29,7 +29,7 @@ def boiler_plug(id):
                 tube.events.append(e)
         db.session.commit()
         return redirect(url_for('boiler',id=id))
-    return render_template('boiler.html',boiler=boiler,
+    return render_template('boiler_edit.html',boiler=boiler,
                            subtitle="Click on Tubes That Were Plugged")
 
 @app.route('/boiler_repair/<int:id>', methods=['GET', 'POST'])
@@ -43,7 +43,7 @@ def boiler_repair(id):
                 tube.events.append(e)
         db.session.commit()
         return redirect(url_for('boiler',id=id))
-    return render_template('boiler.html',boiler=boiler,
+    return render_template('boiler_edit.html',boiler=boiler,
                            subtitle="Click on Tubes That Were Replaced")
 
 ## API Views: Create
