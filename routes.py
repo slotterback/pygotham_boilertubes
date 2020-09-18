@@ -1,6 +1,10 @@
 from flask import render_template, url_for, redirect, request
+from marshmallow import ValidationError
 from app import app, db
 from models import Boiler, BoilerTube, TubePlugEvent
+from schema import boiler_schema, boilers_schema, boiler_with_events_schema
+
+### Main views
 
 @app.route('/')
 def index():
@@ -42,4 +46,41 @@ def boiler_repair(id):
     return render_template('boiler.html',boiler=boiler,
                            subtitle="Click on Tubes That Were Replaced")
 
+## API Views: Create
+@app.route('/api/new_boiler', methods=['POST'])
+def new_boiler():
+    boiler=boiler_schema.load( request.get_json() )
+    db.session.add( boiler )
+    db.session.commit()
+    print(boiler)
+    return boiler_schema.dump( boiler )
+        
+### API Views: Read
+@app.route('/api/get_boiler/<int:id>', methods=['GET'])
+def get_boiler(id):
+    boiler = Boiler.query.filter_by(id=id).first_or_404()
+    return boiler_schema.dump(boiler)
+
+@app.route('/api/get_boilers', methods=['GET'])
+def get_boilers():
+    all_boilers = Boiler.query.all()
+    return boilers_schema.dump(all_boilers)
+
+@app.route('/api/get_boiler_history/<int:id>', methods=['GET'])
+def get_boiler_history(id):
+    boiler = Boiler.query.filter_by(id=id).first_or_404()
+    return boiler_with_events_schema.dump(boiler)
+
+### API Views: Update
+@app.route('/api/update_boiler/<int:id>', methods=['PUT'])
+def update_boiler(id):
+    pass
+
+### API Views: Delete
+@app.route('/api/remove_boiler/<int:id>', methods=['DELETE'])
+def remove_boiler(id):
+    boiler = Boiler.query.filter_by(id=id).first_or_404()
+    db.session.delete(boiler)
+    db.session.commit()
+    return boiler_schema.dump(boiler)
 
