@@ -64,7 +64,7 @@ def get_boiler(id):
 @app.route('/api/get_boilers', methods=['GET'])
 def get_boilers():
     all_boilers = Boiler.query.all()
-    return boilers_schema.dump(all_boilers)
+    return {"boilers": boilers_schema.dump(all_boilers)}
 
 @app.route('/api/get_boiler_history/<int:id>', methods=['GET'])
 def get_boiler_history(id):
