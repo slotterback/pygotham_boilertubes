@@ -1,5 +1,4 @@
 from flask import render_template, url_for, redirect, request
-from marshmallow import ValidationError
 from app import app, db
 from models import Boiler, BoilerTube, TubePlugEvent
 from schema import boiler_schema, boilers_schema, boiler_with_events_schema
@@ -52,7 +51,6 @@ def new_boiler():
     boiler=boiler_schema.load( request.get_json() )
     db.session.add( boiler )
     db.session.commit()
-    print(boiler)
     return boiler_schema.dump( boiler )
         
 ### API Views: Read
@@ -74,7 +72,15 @@ def get_boiler_history(id):
 ### API Views: Update
 @app.route('/api/update_boiler/<int:id>', methods=['PUT'])
 def update_boiler(id):
-    pass
+    boiler = Boiler.query.get_or_404(id)    
+    input = boiler_schema.load( request.get_json() )
+    for tube in boiler.tubes:
+        for input_tube in input.tubes:
+            if (tube.x_coord == input_tube.x_coord and 
+               tube.y_coord == input_tube.y_coord):
+                tube.is_plugged = input_tube.is_plugged
+    db.session.commit()
+    return boiler_schema.dump(boiler)
 
 ### API Views: Delete
 @app.route('/api/remove_boiler/<int:id>', methods=['DELETE'])
